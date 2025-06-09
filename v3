@@ -1,7 +1,5 @@
 
 import streamlit as st
-import pandas as pd
-import io
 
 # Function to calculate the price based on the number of items
 def calculate_price(num_items):
@@ -34,37 +32,3 @@ st.subheader("Summary")
 st.write(f"Pick and Pack Price: £{pick_pack_price}")
 st.write(f"Total Cost (including 45% margin): £{total_cost:.2f}")
 st.write(f"Payment Method: {payment_method}")
-
-# Create a DataFrame for the quote
-quote_data = {
-    "Description": [
-        "Pick and Pack Price",
-        "Base Delivery Cost",
-        "Duties & Taxes",
-        "Total Cost (including 45% margin)"
-    ],
-    "Amount (£)": [
-        pick_pack_price,
-        base_delivery_cost,
-        duties_taxes,
-        total_cost
-    ]
-}
-quote_df = pd.DataFrame(quote_data)
-
-# Download quote as Excel file
-def to_excel(df):
-    output = io.BytesIO()
-    with pd.ExcelWriter(output, engine="openpyxl") as writer:
-        df.to_excel(writer, index=False, sheet_name="Quote")
-    processed_data = output.getvalue()
-    return processed_data
-
-excel_file = to_excel(quote_df)
-
-st.download_button(
-    label="Download Quote as Excel",
-    data=excel_file,
-    file_name="Pick_and_Pack_Quote.xlsx",
-    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-)
